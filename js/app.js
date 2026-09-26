@@ -1193,7 +1193,7 @@ function wireProjects() {
       const d = JSON.parse(raw);
       if (validProject(d) && d.state.groups.length) {
         applyProject(d);
-        showToast('Restored your last session \u2014 <strong>' + esc(d.name || '') + '</strong> &nbsp;·&nbsp; <a id="toastFresh">start fresh</a>', 10000);
+        showToast('Restored your last session \u2014 <strong>' + esc(d.name || '') + '</strong> &nbsp;·&nbsp; <a id="toastFresh">start fresh</a>', 5000);
         const f = $('toastFresh');
         if (f) f.onclick = () => { clearSession(); $('projToast').hidden = true; };
       }
