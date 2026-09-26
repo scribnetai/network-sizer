@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Network Sizer — TOR &amp; FC SAN switch planner for VMware refreshes</title>
 <meta name="description" content="Feed it RVTools data or manual host counts and get a top-of-rack and Fibre Channel SAN switch plan: port counts, oversubscription, dual-fabric FC math, BOM and a customer-ready report. 100% in your browser, nothing uploaded.">
-<link rel="stylesheet" href="css/styles.css?v=4">
+<link rel="stylesheet" href="css/styles.css?v=5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f8cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>NS</text></svg>">
 </head>
 <body>
@@ -114,6 +114,17 @@
         <details><summary>Can I share the results with my team or the customer?</summary><p>Yes — the Plan tab generates a standalone HTML briefing you can download and email. Fully self-contained, no external dependencies, and it contains only the analysis, which you control. Scrub customer names from group labels first if the report leaves your org.</p></details>
         <details><summary>Does it do pricing?</summary><p>No — it produces switch counts, port utilization, and oversubscription ratios. Your VAR quoting tooling turns that BOM into dollars.</p></details>
       </div>
+    </div>
+  </section>
+
+  <section id="changelog" class="section">
+    <div class="wrap">
+      <div class="eyebrow">History</div>
+      <h2>Changelog</h2>
+      <details class="changelog-details">
+        <summary>What changed and when.</summary>
+        <div id="changelog-body"></div>
+      </details>
     </div>
   </section>
 </main>
@@ -305,6 +316,6 @@
 </footer>
 
 <script src="lib/xlsx.full.min.js"></script>
-<script src="js/app.js?v=3"></script>
+<script src="js/app.js?v=4"></script>
 </body>
 </html>
