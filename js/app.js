@@ -254,11 +254,12 @@ const APP = {
 function defaultProf() { return { hosts: 0, mgmtN: 2, mgmtS: 1, dataN: 2, dataS: 25, storN: 2, storS: 25, hbaN: 2, hbaS: 32 }; }
 function defaultEth() { return { preset: 'nx93180', cDl: 48, cDlS: 25, cUlS: 100, uplinks: 6, overTarget: 3, dual: true, spare: false, breakout: true }; }
 function defaultFc() { return { enabled: true, preset: 'g720', cPorts: 64, cSpeed: 64, isl: 8, arrays: 2, targets: 4, targetSpeed: 32, dual: true }; }
+function detectedHosts() { return APP.groups.reduce((a, g) => a + (g.hosts || 0), 0); }
 function ensureCfg() {
   if (!APP.prof) APP.prof = defaultProf();
   if (!APP.eth) APP.eth = defaultEth();
   if (!APP.fc) APP.fc = defaultFc();
-  if (!APP.prof.hosts) APP.prof.hosts = APP.groups.reduce((a, g) => a + g.hosts, 0);
+  if (!APP.prof.hosts) APP.prof.hosts = detectedHosts();
 }
 
 function setStatus(msg) { const s = $('parseStatus'); s.hidden = false; s.innerHTML = msg; }
@@ -497,7 +498,7 @@ function renderConfig() {
 
 function readProfileInputs() {
   const P = APP.prof;
-  P.hosts = Math.max(0, Math.round(parseNum($('gHosts').value)));
+  P.hosts = Math.max(0, Math.round(parseNum($('gHosts').value))) || detectedHosts();
   P.mgmtN = Math.min(Math.max(Math.round(parseNum($('pMgmtN').value)), 0), 8);
   P.mgmtS = parseNum($('pMgmtS').value) || 1;
   P.dataN = Math.min(Math.max(Math.round(parseNum($('pDataN').value)), 0), 8);
@@ -1164,6 +1165,7 @@ function wireApp() {
   $('backToStartBtn').onclick = () => {
     APP.groups = []; APP.ethInv = []; APP.fcInv = []; APP.prof = null; APP.eth = null; APP.fc = null;
     APP.source = null;
+    clearAutosave(); APP.projectName = 'Untitled project'; updateProjName(); $('projSaved').textContent = '';
     $('inventoryWrap').hidden = true; $('existingWrap').hidden = true;
     clearMsgs(); window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -1174,7 +1176,7 @@ function wireApp() {
 
   ['gHosts', 'pMgmtN', 'pMgmtS', 'pDataN', 'pDataS', 'pStorN', 'pStorS', 'pHbaN', 'pHbaS'].forEach((id) => {
     $(id).addEventListener('input', () => { readProfileInputs(); refreshPreviews(); queueAutosave(); });
-    $(id).addEventListener('change', () => { readProfileInputs(); refreshPreviews(); queueAutosave(); });
+    $(id).addEventListener('change', () => { readProfileInputs(); if (id === 'gHosts') $('gHosts').value = APP.prof.hosts; refreshPreviews(); queueAutosave(); });
   });
 
   document.querySelectorAll('#tabs button').forEach((b) => b.addEventListener('click', () => switchTab(b.dataset.tab)));
