@@ -232,7 +232,7 @@ footer{border-top:1px solid var(--border);padding:26px 0}
 
 /* ===== Physgun-inspired vibe ===== */
 .grad-text{background:linear-gradient(92deg,#3B9DFF,#22D3EE);-webkit-background-clip:text;background-clip:text;color:transparent}
-.pg-glyph{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2E7CF6,#1E4FD8);font-size:1.2rem;flex:none;box-shadow:0 0 14px rgba(46,124,246,.35)}
+.pg-glyph{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2E7CF6,#1E4FD8);font-size:1.2rem;flex:none;box-shadow:0 0 14px rgba(46,124,246,.35)}
 .ccard-title{display:flex;align-items:center;gap:12px}
 .panel h3{display:flex;align-items:center;gap:12px}
 .card h3{display:flex;align-items:center;gap:10px}
