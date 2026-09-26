@@ -4,7 +4,7 @@
   --text:#e9edf3; --muted:#9aa4b4; --faint:#6b7484;
   --accent:#4f8cff; --accent2:#7aa8ff; --amber:#f5a623; --green:#3ddc84;
   --red:#ff6b6b; --purple:#b388ff;
-  --radius:12px; --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+  --radius:12px; --font:"Outfit",-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
@@ -229,3 +229,43 @@ footer{border-top:1px solid var(--border);padding:26px 0}
 .proj-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--border2);border-radius:12px;padding:12px 18px;z-index:60;display:flex;gap:10px;align-items:center;box-shadow:0 8px 30px rgba(0,0,0,.45);max-width:min(92vw,560px);font-size:.9rem}
 .proj-toast a{color:var(--accent2);cursor:pointer;white-space:nowrap;text-decoration:underline}
 @media print{ .proj-bar,.proj-panel,.proj-toast{display:none!important} }
+
+/* ===== Physgun-inspired vibe ===== */
+.grad-text{background:linear-gradient(92deg,#3B9DFF,#22D3EE);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pg-glyph{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2E7CF6,#1E4FD8);font-size:1.2rem;flex:none;box-shadow:0 0 14px rgba(46,124,246,.35)}
+.ccard-title{display:flex;align-items:center;gap:12px}
+.panel h3{display:flex;align-items:center;gap:12px}
+.card h3{display:flex;align-items:center;gap:10px}
+.step-head .eyebrow{margin-bottom:0}
+.step-head h2{margin:0}
+
+/* glowing sliders */
+.pg-slider{appearance:none;-webkit-appearance:none;width:100%;height:8px;border-radius:9999px;cursor:grab;background:linear-gradient(to right,#0082ff 0%,#52aaff var(--fill,50%),rgba(255,255,255,.10) var(--fill,50%),rgba(255,255,255,.10) 100%);transition:background .15s}
+.pg-slider:active{cursor:grabbing}
+.pg-slider::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;cursor:grab;background:#fff;border:3px solid #0082ff;border-radius:50%;width:20px;height:20px;transition:transform .15s,box-shadow .15s;box-shadow:0 0 0 4px rgba(0,130,255,.20)}
+.pg-slider::-moz-range-thumb{cursor:grab;background:#fff;border:3px solid #0082ff;border-radius:50%;width:20px;height:20px;transition:transform .15s,box-shadow .15s;box-shadow:0 0 0 4px rgba(0,130,255,.20)}
+.pg-slider:hover::-webkit-slider-thumb,.pg-slider:active::-webkit-slider-thumb{transform:scale(1.15);box-shadow:0 0 0 7px rgba(0,130,255,.28)}
+.pg-slider:hover::-moz-range-thumb,.pg-slider:active::-moz-range-thumb{transform:scale(1.15);box-shadow:0 0 0 7px rgba(0,130,255,.28)}
+@media (prefers-reduced-motion:reduce){.pg-slider::-webkit-slider-thumb,.pg-slider::-moz-range-thumb{transition:none}}
+
+/* slider label row + live value badge + scale */
+.pg-lab{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.pg-lab-t{font-weight:600;font-size:.92rem}
+.pg-val{background:rgba(0,130,255,.15);border:1px solid rgba(0,130,255,.40);color:#93c5fd;border-radius:8px;padding:2px 12px;font-family:var(--mono);font-weight:700;font-size:.95rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pg-scale{display:flex;justify-content:space-between;font-size:.72rem;color:var(--faint);margin-top:6px;font-variant-numeric:tabular-nums}
+
+/* gradient big numbers */
+.stat .v.grad{background:linear-gradient(92deg,#3B9DFF,#22D3EE);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* stacked usage meter */
+.meter{display:flex;height:10px;border-radius:9999px;overflow:hidden;background:#1a2230;margin:10px 0 8px}
+.meter>div{height:100%;transition:width .6s ease}
+.meter .m-blue{background:linear-gradient(90deg,#0082ff,#52aaff)}
+.meter .m-red{background:#ff6b6b}
+.meter-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
+.meter-legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+
+/* scroll reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
