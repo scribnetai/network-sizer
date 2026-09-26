@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Network Sizer — TOR &amp; FC SAN switch planner for VMware refreshes</title>
 <meta name="description" content="Feed it RVTools data or manual host counts and get a top-of-rack and Fibre Channel SAN switch plan: port counts, oversubscription, dual-fabric FC math, BOM and a customer-ready report. 100% in your browser, nothing uploaded.">
-<link rel="stylesheet" href="css/styles.css?v=3">
+<link rel="stylesheet" href="css/styles.css?v=4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f8cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>NS</text></svg>">
 </head>
 <body>
@@ -121,6 +121,24 @@
 <!-- ============ WIZARD ============ -->
 <main id="wizard" hidden>
   <div class="wrap">
+    <div class="proj-bar" id="projBar">
+      <div class="proj-id"><span>💾</span><span id="projName">Untitled project</span><span class="proj-saved" id="projSaved"></span></div>
+      <div class="proj-actions">
+        <button class="btn ghost" id="projBtn">💾 Projects</button>
+        <button class="btn ghost" id="projExportBtn">⬇ Export</button>
+        <button class="btn ghost" id="projImportBtn">⬆ Import</button>
+        <input type="file" id="projImportFile" accept=".json,application/json" hidden>
+      </div>
+    </div>
+    <div class="proj-panel" id="projPanel" hidden>
+      <div class="proj-save-row">
+        <input id="projNameInput" maxlength="60" placeholder="Project name — e.g. Acme DC refresh">
+        <button class="btn primary" id="projDoSave">Save project</button>
+      </div>
+      <div id="projList" class="proj-list"></div>
+      <p class="muted" style="font-size:.8rem;margin:8px 0 0">Projects live in this browser (localStorage) — nothing uploaded. Use <strong>Export</strong> for a portable <code>.json</code> you can keep with the engagement files or move to another machine.</p>
+    </div>
+    <div class="proj-toast" id="projToast" hidden></div>
     <div class="stepper" id="stepper">
       <div class="step active" data-step="1"><span class="step-dot">1</span><span class="step-label">Load demand</span></div>
       <div class="step-sep"></div>
@@ -287,6 +305,6 @@
 </footer>
 
 <script src="lib/xlsx.full.min.js"></script>
-<script src="js/app.js?v=2"></script>
+<script src="js/app.js?v=3"></script>
 </body>
 </html>
