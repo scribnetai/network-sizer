@@ -68,6 +68,12 @@ h2{font-size:1.6rem} h3{font-size:1.15rem}
 .callout{margin-top:22px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.35);border-radius:var(--radius);padding:16px 20px;color:#f2c879;font-size:.95rem}
 
 .faq-list details{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;padding:4px 20px}
+.eyebrow{color:var(--accent2);font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.changelog-details{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:4px 20px}
+.changelog-details summary{cursor:pointer;font-weight:600;padding:14px 0}
+#changelog-body h4{margin:18px 0 6px;color:var(--accent2)}
+#changelog-body ul{margin:0 0 10px;padding-left:20px}
+#changelog-body li{margin-bottom:4px}
 .faq-list summary{cursor:pointer;font-weight:600;padding:14px 0}
 .faq-list p{color:var(--muted);margin:0 0 16px}
 
