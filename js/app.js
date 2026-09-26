@@ -513,9 +513,10 @@ function onCfgInput() {
     E.preset = newPreset;
     const NP = TOR[E.preset];
     if (!NP.custom) {
-      E.uplinks = NP.ul;
+      // shared-pool presets have no dedicated uplinks (ul=0) — seed a sane carve-out instead of 0
+      E.uplinks = NP.sharedPorts ? 4 : NP.ul;
       const ulEl = card.querySelector('[data-ecfg="uplinks"]');
-      if (ulEl) ulEl.value = NP.ul;
+      if (ulEl) ulEl.value = E.uplinks;
     }
   }
   E.cDl = Math.max(1, Math.round(parseNum(ev('cDl')) || 48));
