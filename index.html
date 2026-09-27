@@ -5,31 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Network Sizer — TOR &amp; FC SAN switch planner for VMware refreshes</title>
 <meta name="description" content="Feed it RVTools data or manual host counts and get a top-of-rack and Fibre Channel SAN switch plan: port counts, oversubscription, dual-fabric FC math, BOM and a customer-ready report. 100% in your browser, nothing uploaded.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css?v=8">
+<link rel="stylesheet" href="css/styles.css?v=5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f8cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>NS</text></svg>">
 </head>
 <body>
 
 <header class="nav">
   <div class="nav-inner">
-    <div class="brand-dropdown" id="brandDropdown">
-  <button class="brand" id="brandHome" aria-haspopup="true" aria-expanded="false" title="Switch tool">
-    <span class="brand-badge">NS</span>
-    <span class="brand-name">Network Sizer</span>
-    <span class="brand-caret">▾</span>
-  </button>
-  <div class="brand-menu" role="menu" aria-label="Switch tool">
-    <a class="brand-item" href="https://scribnetai.github.io/server-sizer/"><span class="bi">🖥️</span>Server Sizer</a>
-    <a class="brand-item" href="https://scribnetai.github.io/storage-sizer/"><span class="bi">💾</span>Storage Sizer</a>
-    <button class="brand-item is-current" data-home><span class="bi">🌐</span>Network Sizer<span class="cur">this page</span></button>
-    <a class="brand-item" href="https://scribnetai.github.io/rvtools-analyzer/"><span class="bi">🔍</span>RVTools Analyzer</a>
-  </div>
-</div>
-    <a class="cc-link" href="https://scribnetai.github.io/se-command-center/"><span class="cc-ico">&#8962;</span>SE Command Center</a>
+    <a class="brand" href="#" id="brandHome">
+      <span class="brand-badge">NS</span>
+      <span class="brand-name">Network Sizer</span>
+    </a>
     <nav class="nav-links">
+      <a class="cc-link" href="https://scribnetai.github.io/se-command-center/">&#8962; SE Command Center</a>
       <a href="#how">How it works</a>
       <a href="#math">Sizing math</a>
       <a href="#faq">FAQ</a>
@@ -44,7 +32,7 @@
     <div class="hero-glow"></div>
     <div class="hero-inner">
       <div class="pill">🔒 100% client-side &mdash; zero data retention</div>
-      <h1>Size the network <span class="grad-text">before</span> you quote it.</h1>
+      <h1>Size the network <span class="accent">before</span> you quote it.</h1>
       <p class="lede">Feed in RVTools data or manual host counts, define the per-host port profile, pick your TOR and FC switch platforms — and get port counts, oversubscription ratios, dual-fabric SAN math, a switch BOM, and a customer-ready report. 100% in your browser, nothing uploaded.</p>
       <div class="trust-row">
         <div class="trust"><span class="trust-icon">🛡️</span><div><strong>No upload.</strong><span>Data never leaves your PC</span></div></div>
@@ -58,12 +46,11 @@
 
   <section id="how" class="section">
     <div class="wrap">
-      <div class="eyebrow">3-step workflow</div>
       <h2>How it works</h2>
       <div class="cards3">
-        <div class="card"><h3><span class="pg-glyph">1️⃣</span><span>Load demand</span></h3><p>Drop an <strong>RVTools export</strong> (.xlsx) and it reads host counts per cluster from the <code>vHost</code> tab — or type host counts in manually, or try the demo environment. Optionally log your <strong>existing switch inventory</strong> so the plan shows net-new vs reuse.</p></div>
-        <div class="card"><h3><span class="pg-glyph">2️⃣</span><span>Configure fabrics</span></h3><p>Set the target host count and the per-host port profile — mgmt, data/vMotion, storage IP, FC HBAs. Then tune each fabric: TOR preset, uplinks, oversubscription target, dual-homing and spares for Ethernet; FC preset, ISL reserve, array target ports and dual fabric for the SAN. Live switch-count previews as you tune.</p></div>
-        <div class="card"><h3><span class="pg-glyph">3️⃣</span><span>Get the network plan</span></h3><p>Switch BOM with net-new vs existing reuse, oversubscription ratios, per-fabric worked math, SE talking points, and a downloadable HTML briefing report.</p></div>
+        <div class="card"><h3>1️⃣ Load demand</h3><p>Drop an <strong>RVTools export</strong> (.xlsx) and it reads host counts per cluster from the <code>vHost</code> tab — or type host counts in manually, or try the demo environment. Optionally log your <strong>existing switch inventory</strong> so the plan shows net-new vs reuse.</p></div>
+        <div class="card"><h3>2️⃣ Configure fabrics</h3><p>Set the target host count and the per-host port profile — mgmt, data/vMotion, storage IP, FC HBAs. Then tune each fabric: TOR preset, uplinks, oversubscription target, dual-homing and spares for Ethernet; FC preset, ISL reserve, array target ports and dual fabric for the SAN. Live switch-count previews as you tune.</p></div>
+        <div class="card"><h3>3️⃣ Get the network plan</h3><p>Switch BOM with net-new vs existing reuse, oversubscription ratios, per-fabric worked math, SE talking points, and a downloadable HTML briefing report.</p></div>
       </div>
 
       <h3 class="mt">What it reads from RVTools</h3>
@@ -76,8 +63,7 @@
       </table>
       <p class="muted">Same tolerant parser as the other sizers — modern and legacy column names both work, missing tabs degrade gracefully. No export handy? Manual entry takes host counts per group, which is all the math needs.</p>
 
-      <div class="eyebrow mt">The math</div>
-      <h3 id="math">Sizing math, explained</h3>
+      <h3 class="mt" id="math">Sizing math, explained</h3>
       <p class="muted">Ethernet and FC are sized as two independent fabrics off the same host count:</p>
       <p><code>downlink ports = hosts × Σ ports/host per class</code> <span class="muted small">mgmt + data/vMotion + storage IP</span></p>
       <p><code>TOR switches = ceil(downlink ports ÷ usable downlinks/switch)</code> <span class="muted small">rounded to pairs for A/B dual-homing, +1 for N+1 spare</span></p>
@@ -114,20 +100,19 @@
 
   <section id="faq" class="section alt">
     <div class="wrap">
-      <div class="eyebrow">Questions</div>
       <h2>Frequently asked questions</h2>
       <div class="faq-list">
-        <details><summary>🔒 Is my data uploaded anywhere?</summary><p>No. Files are read with the browser's FileReader API and parsed in memory by a vendored copy of SheetJS running in this page; manual entries never leave the form. There is no server and no network request carrying your data — check devtools' network tab, or disconnect after the page loads.</p></details>
-        <details><summary>💾 Is anything stored in my browser?</summary><p>No. Everything lives in the page's JavaScript memory for the session. Nothing goes to localStorage, IndexedDB, or cookies. Hit "Clear session data" or close the tab and it's gone.</p></details>
-        <details><summary>📊 Do I need an RVTools export, or can I type numbers in?</summary><p>Either. The export gives you host counts per cluster automatically from the <code>vHost</code> tab. Manual entry just needs host counts per group — the math never looks at VMs, they're context only.</p></details>
-        <details><summary>📈 What is oversubscription, and what should I target?</summary><p>The ratio of total downlink bandwidth (everything plugged into the TOR) to total uplink bandwidth (TOR to spine). 3:1 is the classic datacenter rule of thumb the tool defaults to; 1:1 is non-blocking. Storage-heavy or vMotion-heavy estates deserve a lower target — east-west traffic is what oversubscription punishes.</p></details>
-        <details><summary>🛡️ Why does the tool push dual-homing and dual FC fabrics?</summary><p>Because a single TOR switch or a single FC fabric is a maintenance and failure blast radius that takes down every host in the rack. A/B dual-homing (vPC/MLAG) and Fabric A/B are standard presales posture — the tool sizes for them by default and flags it loudly when you turn them off.</p></details>
-        <details><summary>🔗 How should I size the ISL reservation?</summary><p>The default reserves 8 ports per FC switch for inter-switch links. That covers a port-channeled ISL trunk between the A-side switches (and B-side) in a two-switch fabric. Bigger fabrics or long-distance ISLs need more — raise it and watch the usable-port count move.</p></details>
-        <details><summary>⚡ My hosts run 25G but the TOR is 100G — what happens?</summary><p>On the 64×100G preset, enable QSFP breakout: each 100G port becomes 4×25G (or 4×10G). The tool models that. Without breakout, a 25G host burns a whole 100G port — the findings will call it out as waste.</p></details>
-        <details><summary>🖥️ Should management ports live on the TOR switches?</summary><p>They can — SFP28 ports usually accept 1G — but many shops hang mgmt (and IPMI/iDRAC) off a cheap dedicated 1G switch instead of burning 25G TOR ports. If your profile has 1G mgmt on a 25G TOR, the findings suggest the dedicated-mgmt-switch alternative.</p></details>
-        <details><summary>♻️ How does existing-inventory reuse work?</summary><p>Log the switches the customer already owns (preset + count per fabric) on step 1. The plan subtracts reusable ports from demand and reports net-new switches. It assumes existing ports are reusable at the needed speeds — sanity-check that against the actual installed optics.</p></details>
-        <details><summary>📤 Can I share the results with my team or the customer?</summary><p>Yes — the Plan tab generates a standalone HTML briefing you can download and email. Fully self-contained, no external dependencies, and it contains only the analysis, which you control. Scrub customer names from group labels first if the report leaves your org.</p></details>
-        <details><summary>💲 Does it do pricing?</summary><p>No — it produces switch counts, port utilization, and oversubscription ratios. Your VAR quoting tooling turns that BOM into dollars.</p></details>
+        <details><summary>Is my data uploaded anywhere?</summary><p>No. Files are read with the browser's FileReader API and parsed in memory by a vendored copy of SheetJS running in this page; manual entries never leave the form. There is no server and no network request carrying your data — check devtools' network tab, or disconnect after the page loads.</p></details>
+        <details><summary>Is anything stored in my browser?</summary><p>No. Everything lives in the page's JavaScript memory for the session. Nothing goes to localStorage, IndexedDB, or cookies. Hit "Clear session data" or close the tab and it's gone.</p></details>
+        <details><summary>Do I need an RVTools export, or can I type numbers in?</summary><p>Either. The export gives you host counts per cluster automatically from the <code>vHost</code> tab. Manual entry just needs host counts per group — the math never looks at VMs, they're context only.</p></details>
+        <details><summary>What is oversubscription, and what should I target?</summary><p>The ratio of total downlink bandwidth (everything plugged into the TOR) to total uplink bandwidth (TOR to spine). 3:1 is the classic datacenter rule of thumb the tool defaults to; 1:1 is non-blocking. Storage-heavy or vMotion-heavy estates deserve a lower target — east-west traffic is what oversubscription punishes.</p></details>
+        <details><summary>Why does the tool push dual-homing and dual FC fabrics?</summary><p>Because a single TOR switch or a single FC fabric is a maintenance and failure blast radius that takes down every host in the rack. A/B dual-homing (vPC/MLAG) and Fabric A/B are standard presales posture — the tool sizes for them by default and flags it loudly when you turn them off.</p></details>
+        <details><summary>How should I size the ISL reservation?</summary><p>The default reserves 8 ports per FC switch for inter-switch links. That covers a port-channeled ISL trunk between the A-side switches (and B-side) in a two-switch fabric. Bigger fabrics or long-distance ISLs need more — raise it and watch the usable-port count move.</p></details>
+        <details><summary>My hosts run 25G but the TOR is 100G — what happens?</summary><p>On the 64×100G preset, enable QSFP breakout: each 100G port becomes 4×25G (or 4×10G). The tool models that. Without breakout, a 25G host burns a whole 100G port — the findings will call it out as waste.</p></details>
+        <details><summary>Should management ports live on the TOR switches?</summary><p>They can — SFP28 ports usually accept 1G — but many shops hang mgmt (and IPMI/iDRAC) off a cheap dedicated 1G switch instead of burning 25G TOR ports. If your profile has 1G mgmt on a 25G TOR, the findings suggest the dedicated-mgmt-switch alternative.</p></details>
+        <details><summary>How does existing-inventory reuse work?</summary><p>Log the switches the customer already owns (preset + count per fabric) on step 1. The plan subtracts reusable ports from demand and reports net-new switches. It assumes existing ports are reusable at the needed speeds — sanity-check that against the actual installed optics.</p></details>
+        <details><summary>Can I share the results with my team or the customer?</summary><p>Yes — the Plan tab generates a standalone HTML briefing you can download and email. Fully self-contained, no external dependencies, and it contains only the analysis, which you control. Scrub customer names from group labels first if the report leaves your org.</p></details>
+        <details><summary>Does it do pricing?</summary><p>No — it produces switch counts, port utilization, and oversubscription ratios. Your VAR quoting tooling turns that BOM into dollars.</p></details>
       </div>
     </div>
   </section>
@@ -175,7 +160,7 @@
 
     <!-- STEP 1: DATA -->
     <section id="stepData" class="wstep">
-      <div class="step-head"><span class="step-num">1</span><span class="pg-glyph">📊</span><div><div class="eyebrow">Step one</div><h2>Load demand</h2></div></div>
+      <div class="step-head"><span class="step-num">1</span><h2>Load demand</h2></div>
       <p class="muted">Three ways in — pick whichever matches the engagement. Network sizing starts from <strong>hosts</strong>, so RVTools only needs the <code>vHost</code> tab. Optionally log the customer's existing switches below for net-new vs reuse math.</p>
       <div class="cards3" id="start">
         <div class="card">
@@ -255,16 +240,14 @@
 
     <!-- STEP 2: CONFIGURE -->
     <section id="stepConfig" class="wstep" hidden>
-      <div class="step-head"><span class="step-num">2</span><span class="pg-glyph">⚙️</span><div><div class="eyebrow">Step two</div><h2>Configure fabrics</h2></div></div>
+      <div class="step-head"><span class="step-num">2</span><h2>Configure fabrics</h2></div>
       <p class="muted">Set the target host count and the per-host port profile once, then tune each fabric. Switch-count previews update live as you tune. Expand a card to configure it.</p>
 
       <div class="panel" id="globalProfile">
-        <h3><span class="pg-glyph">🎯</span><span>Target environment &amp; per-host port profile</span></h3>
+        <h3>Target environment &amp; per-host port profile</h3>
         <div class="cfg-grid">
-          <div class="cfg-field">
-            <div class="pg-lab"><span class="pg-lab-t">🎯 Target hosts</span><span class="pg-val" id="gHostsNum">0</span></div>
-            <input type="range" class="pg-slider" id="gHosts" min="0" max="128" step="1" value="0">
-            <div class="pg-scale"><span>0</span><span id="gHostsMid">64</span><span id="gHostsMax">128</span></div>
+          <div class="cfg-field"><label>Target hosts: <strong id="gHostsNum">0</strong></label>
+            <input type="number" id="gHosts" min="0" step="1" value="0">
             <div class="cfg-note">Defaults to detected hosts — raise it to size for growth.</div></div>
           <div class="cfg-field"><label>Mgmt ports / host</label>
             <div class="cfg-row"><input type="number" id="pMgmtN" min="0" max="8" step="1" value="2">
@@ -328,12 +311,11 @@
 <footer>
   <div class="wrap foot">
     <span class="muted small">Network Sizer — runs entirely in your browser. Not affiliated with Cisco, Arista, Dell, or Broadcom.</span>
-    <a class="muted small" href="https://scribnet.io" target="_blank" rel="noopener">scribnet.io</a>
     <a class="muted small" href="https://github.com/scribnetai/network-sizer" target="_blank" rel="noopener">GitHub</a>
   </div>
 </footer>
 
 <script src="lib/xlsx.full.min.js"></script>
-<script src="js/app.js?v=8"></script>
+<script src="js/app.js?v=6"></script>
 </body>
 </html>
