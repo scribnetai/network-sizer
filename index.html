@@ -12,10 +12,14 @@
 
 <header class="nav">
   <div class="nav-inner">
-    <a class="brand" href="#" id="brandHome">
-      <span class="brand-badge">NS</span>
-      <span class="brand-name">Network Sizer</span>
-    </a>
+    <div class="brand-dropdown" id="brandDropdown">
+      <button class="brand" id="brandHome" aria-haspopup="true" aria-expanded="false" title="Switch app">
+        <span class="brand-badge">NS</span>
+        <span class="brand-name">Network Sizer</span>
+        <span class="brand-caret">▾</span>
+      </button>
+      <div class="brand-menu" id="brandMenu" role="menu" aria-label="Switch app"></div>
+    </div>
     <nav class="nav-links">
       <a class="cc-link" href="https://scribnetai.github.io/se-command-center/">&#8962; SE Command Center</a>
       <a href="#how">How it works</a>
@@ -316,6 +320,7 @@
 </footer>
 
 <script src="lib/xlsx.full.min.js"></script>
-<script src="js/app.js?v=6"></script>
+<script src="js/app-switcher.js?v=1"></script>
+<script src="js/app.js?v=7"></script>
 </body>
 </html>

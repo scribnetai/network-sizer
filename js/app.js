@@ -1144,7 +1144,6 @@ function renderChangelog() {
 function wireApp() {
   wireProjects();
   document.querySelector('.cta').addEventListener('click', (e) => { e.preventDefault(); startWizard(); });
-  $('brandHome').addEventListener('click', (e) => { e.preventDefault(); $('wizard').hidden = true; $('landing').hidden = false; window.scrollTo({ top: 0 }); });
 
   // Nav anchor links (How it works / Sizing math / FAQ) target sections inside
   // #landing. When the wizard is open, #landing is hidden and the browser
