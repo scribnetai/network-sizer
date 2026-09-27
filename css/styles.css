@@ -24,6 +24,17 @@ h2{font-size:1.6rem} h3{font-size:1.15rem}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
 .brand-badge{background:var(--accent);color:#fff;font-weight:800;border-radius:8px;padding:4px 9px;font-size:.9rem}
 .brand-name{font-weight:700}
+.brand-dropdown{position:relative}
+button.brand{background:none;border:0;cursor:pointer;font:inherit;padding:6px 10px;margin:-6px -10px;border-radius:10px}
+button.brand:hover{background:rgba(255,255,255,.05)}
+.brand-caret{font-size:.65rem;color:var(--muted);margin-left:1px}
+.brand-menu{position:absolute;top:calc(100% + 10px);left:0;min-width:248px;background:var(--panel);border:1px solid var(--border2);border-radius:14px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.5);display:none;z-index:60}
+.brand-dropdown.open .brand-menu{display:block}
+.brand-item{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:9px;color:var(--text);text-decoration:none;font-size:.9rem;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;box-sizing:border-box}
+.brand-item:hover{background:rgba(80,140,255,.12)}
+.brand-item .bi{font-size:1.05rem;line-height:1}
+.brand-item.is-current{color:var(--accent2);font-weight:700}
+.brand-item .cur{margin-left:auto;font-size:.7rem;color:var(--muted);font-weight:400}
 .nav-links{display:flex;gap:22px}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:.92rem}
 .nav-links a:hover{color:var(--text)}
