@@ -10,3 +10,4 @@
 
 ## 2026-09-27
 - Added top-left app-switcher dropdown on the brand mark: one-click jumps to every app in the suite (full index, this page marked).
+- Fixed: shared-100G breakout switch sizing — sub-ports now share physical ports 4:1 in the demand math (previously undersized mixed-speed profiles). Corrected privacy copy: Projects/autosave use browser localStorage, machine-only, never uploaded.
