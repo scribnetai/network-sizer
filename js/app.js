@@ -433,37 +433,6 @@ function segHTML(seg, opts, cur) {
     '<button type="button" data-val="' + o[0] + '"' + (o[0] === cur ? ' class="active"' : '') + '>' + o[1] + '</button>'
   ).join('') + '</div>';
 }
-function segCfg(kind, field, opts, cur) {
-  // Segmented pill group bound to a config field (Physgun vibe); the chosen value lives in data-segval.
-  return '<div class="seg" data-' + kind + 'cfg="' + field + '" data-segval="' + esc(cur) + '">' + opts.map((o) =>
-    '<button type="button" data-val="' + o[0] + '"' + (String(o[0]) === String(cur) ? ' class="active"' : '') + '>' + o[1] + '</button>'
-  ).join('') + '</div>';
-}
-function pgField(label, badgeAttr, badgeVal, slider, scale, note) {
-  // Physgun slider block: label row w/ live badge, glowing slider, min/mid/max scale.
-  return '<div class="cfg-field"><div class="pg-lab"><span class="pg-lab-t">' + label + '</span>' +
-    '<span class="pg-val" ' + badgeAttr + '>' + badgeVal + '</span></div>' + slider +
-    '<div class="pg-scale">' + scale.map((s) => '<span>' + s + '</span>').join('') + '</div>' +
-    (note ? '<div class="cfg-note">' + note + '</div>' : '') + '</div>';
-}
-function pgRange(field, kind, min, max, step, val, label, scale, note, displayVal) {
-  return pgField(label, 'data-lb="' + field + '"', displayVal != null ? displayVal : val,
-    '<input type="range" class="pg-slider" data-' + kind + 'cfg="' + field + '" min="' + min + '" max="' + max +
-    '" step="' + step + '" value="' + val + '">', scale, note);
-}
-function sliderFill(el) {
-  const min = parseFloat(el.min) || 0, max = parseFloat(el.max) || 100;
-  const v = Math.min(Math.max(parseFloat(el.value) || 0, min), max);
-  return max > min ? ((v - min) / (max - min)) * 100 : 0;
-}
-function paintSlider(el) {
-  if (el && el.classList && el.classList.contains('pg-slider') && el.style) {
-    el.style.setProperty('--fill', sliderFill(el) + '%');
-  }
-}
-function paintSliders(root) {
-  (root || document).querySelectorAll('.pg-slider').forEach(paintSlider);
-}
 function speedSeg(cur) {
   return [[1, '1G'], [10, '10G'], [25, '25G'], [40, '40G'], [100, '100G']]
     .map((o) => '<option value="' + o[0] + '"' + (o[0] === cur ? ' selected' : '') + '>' + o[1] + '</option>').join('');
@@ -472,15 +441,8 @@ function speedSeg(cur) {
 function renderConfig() {
   ensureCfg();
   const P = APP.prof;
-  const gMax = Math.max(128, Math.ceil(detectedHosts() * 2 / 25) * 25);
-  const gEl = $('gHosts');
-  gEl.max = gMax;
-  $('gHostsMid').textContent = Math.round(gMax / 2);
-  $('gHostsMax').textContent = gMax;
-  if (P.hosts > gMax) P.hosts = gMax;
-  gEl.value = P.hosts;
+  $('gHosts').value = P.hosts;
   $('gHostsNum').textContent = fmtInt(P.hosts);
-  paintSlider(gEl);
   $('pMgmtN').value = P.mgmtN; $('pMgmtS').value = P.mgmtS;
   $('pDataN').value = P.dataN; $('pDataS').value = P.dataS;
   $('pStorN').value = P.storN; $('pStorS').value = P.storS;
@@ -491,7 +453,7 @@ function renderConfig() {
   const wrap = $('fabricCards');
   wrap.innerHTML =
     '<div class="ccard open" data-card="eth">' +
-      '<div class="ccard-head"><div><div class="ccard-title"><span class="pg-glyph">🌐</span><span>Ethernet fabric — top-of-rack</span></div>' +
+      '<div class="ccard-head"><div><div class="ccard-title">🌐 Ethernet fabric — top-of-rack</div>' +
       '<div class="ccard-sub" data-pv="ethSub"></div></div>' +
       '<div class="ccard-preview"><div class="hosts"><span data-pv="ethSw">—</span> <small>switches</small></div><div class="binding" data-pv="ethOver"></div></div>' +
       '<div class="ccard-toggle">▾</div></div>' +
@@ -499,26 +461,26 @@ function renderConfig() {
         '<div class="cfg-field"><label>TOR switch preset</label><select data-ecfg="preset">' + torOpts + '</select><div class="cfg-note" data-pv="ethNote"></div></div>' +
         '<div class="cfg-field" data-eth-custom' + (TOR[eth.preset].custom ? '' : ' hidden') + '><label>Custom ports</label><div class="cfg-row"><input type="number" data-ecfg="cDl" min="1" value="' + eth.cDl + '"><select data-ecfg="cDlS">' + speedSeg(eth.cDlS) + '</select></div>' +
         '<div class="cfg-row" style="margin-top:8px"><select data-ecfg="cUlS">' + [[40, '40G uplink'], [100, '100G uplink'], [400, '400G uplink']].map((o) => '<option value="' + o[0] + '"' + (o[0] === eth.cUlS ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div><div class="cfg-note">Downlink count/speed and uplink speed for a custom SKU.</div></div>' +
-        pgRange('uplinks', 'e', 0, 12, 1, eth.uplinks, '🔌 Uplinks / switch', ['0', '6', '12'], 'TOR → spine links per switch (at <span data-pv="ethUlSpeed"></span>).') +
-        pgRange('overTarget', 'e', 1, 8, 0.5, eth.overTarget, '📊 Oversubscription target', ['1', '4.5', '8'], 'Downlink ÷ uplink bandwidth. 3:1 is the classic rule of thumb.', eth.overTarget + ':1') +
-        '<div class="cfg-field"><div class="pg-lab"><span class="pg-lab-t">🔗 A/B dual-homing</span></div>' + segCfg('e', 'dual', [['1', 'Yes'], ['0', 'No']], eth.dual ? '1' : '0') + '<div class="cfg-note">Rounds the switch count up to pairs.</div></div>' +
-        '<div class="cfg-field"><div class="pg-lab"><span class="pg-lab-t">➕ N+1 spare</span></div>' + segCfg('e', 'spare', [['1', 'Yes'], ['0', 'No']], eth.spare ? '1' : '0') + '<div class="cfg-note">Adds one spare switch to the BOM.</div></div>' +
-        '<div class="cfg-field" data-eth-breakout' + ((TOR[eth.preset].sharedPorts) ? '' : ' hidden') + '><div class="pg-lab"><span class="pg-lab-t">⚡ 100G breakout</span></div>' + segCfg('e', 'breakout', [['1', 'On'], ['0', 'Off']], eth.breakout ? '1' : '0') + '<div class="cfg-note">Lets ≤25G hosts share one 100G port four ways.</div></div>' +
+        '<div class="cfg-field"><label>Uplinks / switch: <strong data-lb="uplinks">' + eth.uplinks + '</strong></label><input type="range" data-ecfg="uplinks" min="0" max="12" step="1" value="' + eth.uplinks + '"><div class="cfg-note">TOR → spine links per switch (at <span data-pv="ethUlSpeed"></span>).</div></div>' +
+        '<div class="cfg-field"><label>Oversubscription target: <strong data-lb="overTarget">' + eth.overTarget + ':1</strong></label><input type="range" data-ecfg="overTarget" min="1" max="8" step="0.5" value="' + eth.overTarget + '"><div class="cfg-note">Downlink ÷ uplink bandwidth. 3:1 is the classic rule of thumb.</div></div>' +
+        '<div class="cfg-field"><label>Redundancy</label><div class="cfg-row" style="align-items:center"><input type="checkbox" data-ecfg="dual" style="width:auto;flex:none"' + (eth.dual ? ' checked' : '') + '><span class="muted" style="font-size:.85rem">A/B dual-homing (round up to pairs)</span></div>' +
+        '<div class="cfg-row" style="align-items:center;margin-top:8px"><input type="checkbox" data-ecfg="spare" style="width:auto;flex:none"' + (eth.spare ? ' checked' : '') + '><span class="muted" style="font-size:.85rem">N+1 spare switch</span></div></div>' +
+        '<div class="cfg-field" data-eth-breakout' + ((TOR[eth.preset].sharedPorts) ? '' : ' hidden') + '><label>100G breakout</label><div class="cfg-row" style="align-items:center"><input type="checkbox" data-ecfg="breakout" style="width:auto;flex:none"' + (eth.breakout ? ' checked' : '') + '><span class="muted" style="font-size:.85rem">4×25G breakout on QSFP ports</span></div><div class="cfg-note">Lets ≤25G hosts share one 100G port four ways.</div></div>' +
       '</div><div class="spec-line" data-pv="ethSpec"></div></div></div>' +
     '<div class="ccard open" data-card="fc">' +
-      '<div class="ccard-head"><div><div class="ccard-title"><span class="pg-glyph">🔌</span><span>FC fabric — SAN switches</span></div>' +
+      '<div class="ccard-head"><div><div class="ccard-title">🔌 FC fabric — SAN switches</div>' +
       '<div class="ccard-sub" data-pv="fcSub"></div></div>' +
       '<div class="ccard-preview"><div class="hosts"><span data-pv="fcSw">—</span> <small>switches</small></div><div class="binding" data-pv="fcFab"></div></div>' +
       '<div class="ccard-toggle">▾</div></div>' +
       '<div class="ccard-body"><div class="cfg-grid">' +
-        '<div class="cfg-field"><div class="pg-lab"><span class="pg-lab-t">🔌 Size an FC SAN fabric</span></div>' + segCfg('f', 'enabled', [['1', 'On'], ['0', 'Off']], fc.enabled ? '1' : '0') + '<div class="cfg-note">Switch off for IP-storage-only designs.</div></div>' +
+        '<div class="cfg-field"><label>FC fabric</label><div class="cfg-row" style="align-items:center"><input type="checkbox" data-fcfg="enabled" style="width:auto;flex:none"' + (fc.enabled ? ' checked' : '') + '><span class="muted" style="font-size:.85rem">Size an FC SAN fabric</span></div><div class="cfg-note">Untick for IP-storage-only designs.</div></div>' +
         '<div class="cfg-field"><label>FC switch preset</label><select data-fcfg="preset">' + fcOpts + '</select><div class="cfg-note" data-pv="fcNote"></div></div>' +
         '<div class="cfg-field" data-fc-custom' + (FC[fc.preset].custom ? '' : ' hidden') + '><label>Custom FC ports</label><div class="cfg-row"><input type="number" data-fcfg="cPorts" min="1" value="' + fc.cPorts + '"><select data-fcfg="cSpeed">' + [[16, '16G'], [32, '32G'], [64, '64G']].map((o) => '<option value="' + o[0] + '"' + (o[0] === fc.cSpeed ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div><div class="cfg-note">Total ports and max speed for a custom SKU.</div></div>' +
-        pgRange('isl', 'f', 0, 32, 1, fc.isl, '🔗 ISL ports reserved / switch', ['0', '16', '32'], 'Ports held back for inter-switch links (not usable by hosts/targets).') +
-        pgRange('arrays', 'f', 0, 8, 1, fc.arrays, '🗄️ Storage arrays', ['0', '4', '8'], 'Arrays zoned into the fabric.') +
-        pgRange('targets', 'f', 0, 16, 1, fc.targets, '🎯 Target ports / array', ['0', '8', '16'], 'Front-end FC ports per array.') +
+        '<div class="cfg-field"><label>ISL ports reserved / switch: <strong data-lb="isl">' + fc.isl + '</strong></label><input type="range" data-fcfg="isl" min="0" max="32" step="1" value="' + fc.isl + '"><div class="cfg-note">Ports held back for inter-switch links (not usable by hosts/targets).</div></div>' +
+        '<div class="cfg-field"><label>Storage arrays: <strong data-lb="arrays">' + fc.arrays + '</strong></label><input type="range" data-fcfg="arrays" min="0" max="8" step="1" value="' + fc.arrays + '"><div class="cfg-note">Arrays zoned into the fabric.</div></div>' +
+        '<div class="cfg-field"><label>Target ports / array: <strong data-lb="targets">' + fc.targets + '</strong></label><input type="range" data-fcfg="targets" min="0" max="16" step="1" value="' + fc.targets + '"><div class="cfg-note">Front-end FC ports per array.</div></div>' +
         '<div class="cfg-field"><label>Target port speed</label><select data-fcfg="targetSpeed">' + [[16, '16G'], [32, '32G'], [64, '64G']].map((o) => '<option value="' + o[0] + '"' + (o[0] === fc.targetSpeed ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select><div class="cfg-note">Array front-end speed.</div></div>' +
-        '<div class="cfg-field"><div class="pg-lab"><span class="pg-lab-t">🛡️ Fabric redundancy</span></div>' + segCfg('f', 'dual', [['1', 'A/B dual'], ['0', 'Single']], fc.dual ? '1' : '0') + '<div class="cfg-note">Standard SAN posture: every HBA path survives a fabric failure.</div></div>' +
+        '<div class="cfg-field"><label>Fabric redundancy</label><div class="cfg-row" style="align-items:center"><input type="checkbox" data-fcfg="dual" style="width:auto;flex:none"' + (fc.dual ? ' checked' : '') + '><span class="muted" style="font-size:.85rem">Dual fabric (A/B — switches come in pairs)</span></div><div class="cfg-note">Standard SAN posture: every HBA path survives a fabric failure.</div></div>' +
       '</div><div class="spec-line" data-pv="fcSpec"></div></div></div>';
 
   wrap.querySelectorAll('.ccard').forEach((card) => {
@@ -528,25 +490,15 @@ function renderConfig() {
     });
   });
   wrap.querySelectorAll('[data-ecfg],[data-fcfg]').forEach((el) => {
-    el.addEventListener('input', (e) => { paintSlider(e.target); onCfgInput(); });
-    el.addEventListener('change', (e) => { paintSlider(e.target); onCfgInput(); });
+    el.addEventListener('input', onCfgInput);
+    el.addEventListener('change', onCfgInput);
   });
-  wrap.querySelectorAll('.seg[data-ecfg],.seg[data-fcfg]').forEach((seg) => {
-    seg.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
-      seg.querySelectorAll('button').forEach((x) => x.classList.remove('active'));
-      b.classList.add('active');
-      seg.dataset.segval = b.dataset.val;
-      onCfgInput();
-    }));
-  });
-  paintSliders(wrap);
   refreshPreviews();
 }
 
 function readProfileInputs() {
   const P = APP.prof;
-  const gMax = parseNum($('gHosts').max) || 128;
-  P.hosts = Math.min(Math.max(Math.round(parseNum($('gHosts').value)), 0), gMax) || detectedHosts();
+  P.hosts = Math.max(0, Math.round(parseNum($('gHosts').value))) || detectedHosts();
   P.mgmtN = Math.min(Math.max(Math.round(parseNum($('pMgmtN').value)), 0), 8);
   P.mgmtS = parseNum($('pMgmtS').value) || 1;
   P.dataN = Math.min(Math.max(Math.round(parseNum($('pDataN').value)), 0), 8);
@@ -561,7 +513,7 @@ function onCfgInput() {
   readProfileInputs();
   const card = document.querySelector('.ccard[data-card="eth"]');
   const E = APP.eth;
-  const ev = (s) => { const el = card.querySelector('[data-ecfg="' + s + '"]'); if (!el) return null; if (el.type === 'checkbox') return el.checked; if (el.dataset && el.dataset.segval !== undefined) return el.dataset.segval; return el.value; };
+  const ev = (s) => { const el = card.querySelector('[data-ecfg="' + s + '"]'); return el ? (el.type === 'checkbox' ? el.checked : el.value) : null; };
   const newPreset = ev('preset') || 'nx93180';
   if (newPreset !== E.preset) {
     E.preset = newPreset;
@@ -570,7 +522,7 @@ function onCfgInput() {
       // shared-pool presets have no dedicated uplinks (ul=0) — seed a sane carve-out instead of 0
       E.uplinks = NP.sharedPorts ? 4 : NP.ul;
       const ulEl = card.querySelector('[data-ecfg="uplinks"]');
-      if (ulEl) { ulEl.value = E.uplinks; paintSlider(ulEl); }
+      if (ulEl) ulEl.value = E.uplinks;
     }
   }
   E.cDl = Math.max(1, Math.round(parseNum(ev('cDl')) || 48));
@@ -578,14 +530,14 @@ function onCfgInput() {
   E.cUlS = parseNum(ev('cUlS')) || 100;
   E.uplinks = Math.min(Math.max(Math.round(parseNum(ev('uplinks')) || 0), 0), 12);
   E.overTarget = Math.min(Math.max(parseNum(ev('overTarget')) || 3, 1), 8);
-  E.dual = ev('dual') === '1';
-  E.spare = ev('spare') === '1';
-  E.breakout = ev('breakout') === '1';
+  E.dual = !!ev('dual');
+  E.spare = !!ev('spare');
+  E.breakout = !!ev('breakout');
 
   const fcard = document.querySelector('.ccard[data-card="fc"]');
   const F = APP.fc;
-  const fv = (s) => { const el = fcard.querySelector('[data-fcfg="' + s + '"]'); if (!el) return null; if (el.type === 'checkbox') return el.checked; if (el.dataset && el.dataset.segval !== undefined) return el.dataset.segval; return el.value; };
-  F.enabled = fv('enabled') === '1';
+  const fv = (s) => { const el = fcard.querySelector('[data-fcfg="' + s + '"]'); return el ? (el.type === 'checkbox' ? el.checked : el.value) : null; };
+  F.enabled = !!fv('enabled');
   F.preset = fv('preset') || 'g720';
   F.cPorts = Math.max(1, Math.round(parseNum(fv('cPorts')) || 64));
   F.cSpeed = parseNum(fv('cSpeed')) || 64;
@@ -593,7 +545,7 @@ function onCfgInput() {
   F.arrays = Math.min(Math.max(Math.round(parseNum(fv('arrays')) || 0), 0), 8);
   F.targets = Math.min(Math.max(Math.round(parseNum(fv('targets')) || 0), 0), 16);
   F.targetSpeed = parseNum(fv('targetSpeed')) || 32;
-  F.dual = fv('dual') === '1';
+  F.dual = !!fv('dual');
 
   // Show/hide custom + breakout rows
   card.querySelectorAll('[data-eth-custom]').forEach((el) => { el.hidden = !TOR[E.preset].custom; });
@@ -711,63 +663,30 @@ function renderPlanTab() {
   };
 
   const stats =
-    '<div class="stat"><div class="v blue grad">' + ethR.switches + '</div><div class="l">TOR switches</div></div>' +
-    '<div class="stat"><div class="v purple grad">' + (fcR.enabled ? fcR.switches : '—') + '</div><div class="l">FC switches</div></div>' +
+    '<div class="stat"><div class="v blue">' + ethR.switches + '</div><div class="l">TOR switches</div></div>' +
+    '<div class="stat"><div class="v purple">' + (fcR.enabled ? fcR.switches : '—') + '</div><div class="l">FC switches</div></div>' +
     '<div class="stat"><div class="v">' + fmtInt(ethR.servedPorts) + '</div><div class="l">Ethernet downlink ports</div></div>' +
     '<div class="stat"><div class="v ' + (ethR.over > E.overTarget ? 'amber' : 'green') + '">' + overStr(ethR.over) + '</div><div class="l">Oversubscription (target ' + E.overTarget + ':1)</div></div>' +
     (fcR.enabled ? '<div class="stat"><div class="v">' + fmtInt(fcR.devicePorts) + '</div><div class="l">FC device ports</div></div>' : '') +
     ((nnEth.reuse > 0 || nnFc.reuse > 0)
       ? '<div class="stat"><div class="v green">' + (nnEth.switches + nnFc.switches) + '</div><div class="l">Net-new switches</div></div>' : '');
 
-  // Stacked oversubscription meter + downlink bandwidth mix (Physgun vibe: animated bars)
-  const dlBW = ethR.servedBW, ulBW = ethR.uplinkBW;
-  let overMeter = '';
-  if (dlBW > 0) {
-    const covPct = ulBW >= dlBW ? 100 : (ulBW / dlBW) * 100;
-    const excPct = 100 - covPct;
-    overMeter =
-      '<div class="meter"><div class="m-blue" style="width:' + covPct.toFixed(1) + '%"></div>' +
-      (excPct > 0.05 ? '<div class="m-red" style="width:' + excPct.toFixed(1) + '%"></div>' : '') + '</div>' +
-      '<div class="meter-legend">' +
-      '<span><span class="sw" style="background:#52aaff"></span>Uplink covers <strong>' + fmtInt(ulBW) + ' Gbps</strong></span>' +
-      (excPct > 0.05
-        ? '<span><span class="sw" style="background:#ff6b6b"></span>Downlink exceeds uplink by <strong>' + fmtInt(dlBW - ulBW) + ' Gbps</strong></span>'
-        : '<span><span class="sw" style="background:#3ddc84"></span>Fully covered — <strong>' + overStr(ethR.over) + '</strong></span>') +
-      '</div>';
-  }
-  const mixClasses = [
-    ['Mgmt', P.mgmtN, P.mgmtS, ''],
-    ['Data / vMotion', P.dataN, P.dataS, 'purple'],
-    ['Storage IP', P.storN, P.storS, 'green'],
-  ];
-  const mixBars = mixClasses
-    .map((c) => [c[0], c[2] <= ethR.P.dlSpeed ? P.hosts * c[1] * c[2] : 0, c[3]])
-    .filter((r) => r[1] > 0)
-    .map((r) =>
-      '<div class="bar-row"><div class="bar-label">' + r[0] + '</div>' +
-      '<div class="bar-track"><div class="bar-fill ' + r[2] + '" style="width:' + (dlBW > 0 ? Math.min(100, (r[1] / dlBW) * 100).toFixed(1) : 0) + '%"></div></div>' +
-      '<div class="bar-val">' + fmtInt(r[1]) + ' Gbps</div></div>'
-    ).join('');
-  const bwPanel = '<div class="panel"><h3><span class="pg-glyph">🌊</span><span>Bandwidth &amp; oversubscription</span></h3>' +
-    overMeter + mixBars +
-    '<p class="note">Oversubscription <strong>' + overStr(ethR.over) + '</strong> vs target <strong>' + E.overTarget + ':1</strong> — downlink demand <strong>' + fmtInt(dlBW) + ' Gbps</strong>, uplink capacity <strong>' + fmtInt(ulBW) + ' Gbps</strong>. Bars animate as you re-tune on the Configure step.</p></div>';
-
   $('tab-plan').innerHTML =
     '<div class="stat-grid">' + stats + '</div>' +
-    '<div class="panel"><h3><span class="pg-glyph">📦</span><span>Bill of materials <span class="sub">switch counts — optics, cables &amp; licenses via your VAR quoting</span></span></h3>' +
+    '<div class="panel"><h3>Bill of materials <span class="sub">switch counts — optics, cables &amp; licenses via your VAR quoting</span></h3>' +
     '<div class="table-scroll"><table class="data"><thead><tr><th>Fabric</th><th>Item</th><th>Detail</th><th class="num">Qty</th></tr></thead>' +
     '<tbody>' + bomRows + '</tbody></table></div></div>' +
     '<div class="grid2">' +
-    '<div class="panel"><h3><span class="pg-glyph">📊</span><span>Port utilization</span></h3>' +
+    '<div class="panel"><h3>Port utilization</h3>' +
       utilBar('Ethernet downlinks', ethUtilPct) +
       (fcR.enabled ? utilBar('FC usable ports / fabric', fcUtilPct) : '') +
       '<p class="note">Utilization = used ports ÷ usable ports across the sized switches. High 90s means no room for adds/moves/changes.</p></div>' +
-    '<div class="panel"><h3><span class="pg-glyph">📋</span><span>Demand summary</span></h3><div class="spec-line" style="margin-top:0">' + profileSummary() + '</div>' +
+    '<div class="panel"><h3>Demand summary</h3><div class="spec-line" style="margin-top:0">' + profileSummary() + '</div>' +
       '<p class="muted small" style="margin-bottom:0">Ethernet downlink bandwidth: <strong>' + fmtInt(ethR.servedBW) + ' Gbps</strong> · uplink bandwidth: <strong>' + fmtInt(ethR.uplinkBW) + ' Gbps</strong>' +
       (fcR.enabled ? '<br>FC device ports: <strong>' + fmtInt(fcR.hostPorts) + '</strong> host + <strong>' + fmtInt(fcR.targetPorts) + '</strong> target' +
         (fcR.ratio != null ? ' (' + fmt1(fcR.ratio) + ':1 host:target)' : '') +
         ' · ISL reserve <strong>' + fmtInt(fcR.islBW) + ' Gbps</strong>/switch' : '') + '</p></div>' +
-    '</div>' + bwPanel;
+    '</div>';
 }
 
 function ethWorked() {
@@ -813,8 +732,8 @@ function fcWorked() {
 function renderFabricsTab() {
   const { fcR } = APP.results;
   $('tab-fabrics').innerHTML =
-    '<div class="panel"><h3><span class="pg-glyph">🌐</span><span>Ethernet fabric — worked math <span class="sub">' + esc(APP.results.ethR.P.label) + '</span></span></h3>' + ethWorked() + '</div>' +
-    '<div class="panel"><h3><span class="pg-glyph">🔌</span><span>FC fabric — worked math <span class="sub">' + (fcR.enabled ? esc(fcR.P.label) : 'disabled') + '</span></span></h3>' + fcWorked() + '</div>';
+    '<div class="panel"><h3>🌐 Ethernet fabric — worked math <span class="sub">' + esc(APP.results.ethR.P.label) + '</span></h3>' + ethWorked() + '</div>' +
+    '<div class="panel"><h3>🔌 FC fabric — worked math <span class="sub">' + (fcR.enabled ? esc(fcR.P.label) : 'disabled') + '</span></h3>' + fcWorked() + '</div>';
 }
 
 /* ================= Findings ================= */
@@ -920,12 +839,12 @@ function buildFindings() {
 
 function renderFindingsTab() {
   const Fl = buildFindings();
-  $('tab-findings').innerHTML = '<div class="panel"><h3><span class="pg-glyph">💡</span><span>SE talking points <span class="sub">' + Fl.length + ' findings</span></span></h3>' +
+  $('tab-findings').innerHTML = '<div class="panel"><h3>SE talking points <span class="sub">' + Fl.length + ' findings</span></h3>' +
     Fl.map((f) => '<div class="finding ' + f.sev + '"><div class="sev">' + f.icon + '</div><div><strong>' + f.title + '</strong><p>' + f.body + '</p></div></div>').join('') + '</div>';
 }
 
 function renderReportTab() {
-  $('tab-report').innerHTML = '<div class="panel"><h3><span class="pg-glyph">📄</span><span>Customer-ready briefing</span></h3>' +
+  $('tab-report').innerHTML = '<div class="panel"><h3>📄 Customer-ready briefing</h3>' +
     '<p class="muted">Generates a standalone HTML report — BOM, worked fabric math, oversubscription, findings, and methodology. Self-contained (no external dependencies), safe to email. Scrub customer names from group labels first if it leaves your org.</p>' +
     '<div class="toolbar"><button class="btn primary" id="dlReportBtn2">⬇ Download HTML report</button></div></div>';
   $('dlReportBtn2').onclick = downloadReport;
@@ -1193,7 +1112,7 @@ function wireProjects() {
       const d = JSON.parse(raw);
       if (validProject(d) && d.state.groups.length) {
         applyProject(d);
-        showToast('Restored your last session \u2014 <strong>' + esc(d.name || '') + '</strong> &nbsp;·&nbsp; <a id="toastFresh">start fresh</a>', 5000);
+        showToast('Restored your last session \u2014 <strong>' + esc(d.name || '') + '</strong> &nbsp;·&nbsp; <a id="toastFresh">start fresh</a>', 10000);
         const f = $('toastFresh');
         if (f) f.onclick = () => { clearSession(); $('projToast').hidden = true; };
       }
@@ -1225,20 +1144,22 @@ function renderChangelog() {
 function wireApp() {
   wireProjects();
   document.querySelector('.cta').addEventListener('click', (e) => { e.preventDefault(); startWizard(); });
-  // Brand dropdown: toggle the tool-switcher menu; the "this page" item returns to the landing view.
-const brandDD = $('brandDropdown'), brandBtn = $('brandHome');
-function closeBrandMenu(){ brandDD.classList.remove('open'); brandBtn.setAttribute('aria-expanded','false'); }
-brandBtn.addEventListener('click', (e) => {
-  e.preventDefault();
-  const open = brandDD.classList.toggle('open');
-  brandBtn.setAttribute('aria-expanded', String(open));
-});
-document.addEventListener('click', (e) => { if (!brandDD.contains(e.target)) closeBrandMenu(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBrandMenu(); });
-brandDD.querySelector('[data-home]').addEventListener('click', () => {
-  closeBrandMenu();
-  $('wizard').hidden = true; $('landing').hidden = false; window.scrollTo({ top: 0 });
-});
+  $('brandHome').addEventListener('click', (e) => { e.preventDefault(); $('wizard').hidden = true; $('landing').hidden = false; window.scrollTo({ top: 0 }); });
+
+  // Nav anchor links (How it works / Sizing math / FAQ) target sections inside
+  // #landing. When the wizard is open, #landing is hidden and the browser
+  // can't scroll to a hidden target — so exit to the landing first, then jump.
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const href = a.getAttribute('href');
+      const target = href.length > 1 && document.querySelector(href);
+      if (!target) return; // external links (GitHub) behave normally
+      e.preventDefault();
+      if ($('landing').hidden) { $('wizard').hidden = true; $('landing').hidden = false; }
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', href);
+    });
+  });
 
   const dz = $('dropzone'), fi = $('fileInput');
   dz.addEventListener('click', () => fi.click());
@@ -1269,23 +1190,14 @@ brandDD.querySelector('[data-home]').addEventListener('click', () => {
   $('backToConfigBtn').onclick = () => setStep(2);
 
   ['gHosts', 'pMgmtN', 'pMgmtS', 'pDataN', 'pDataS', 'pStorN', 'pStorS', 'pHbaN', 'pHbaS'].forEach((id) => {
-    $(id).addEventListener('input', () => { readProfileInputs(); refreshPreviews(); paintSlider($(id)); queueAutosave(); });
-    $(id).addEventListener('change', () => { readProfileInputs(); if (id === 'gHosts') $('gHosts').value = APP.prof.hosts; refreshPreviews(); paintSlider($(id)); queueAutosave(); });
+    $(id).addEventListener('input', () => { readProfileInputs(); refreshPreviews(); queueAutosave(); });
+    $(id).addEventListener('change', () => { readProfileInputs(); if (id === 'gHosts') $('gHosts').value = APP.prof.hosts; refreshPreviews(); queueAutosave(); });
   });
 
   document.querySelectorAll('#tabs button').forEach((b) => b.addEventListener('click', () => switchTab(b.dataset.tab)));
   $('printBtn').onclick = () => window.print();
   $('dlReportBtn').onclick = downloadReport;
   $('clearBtn').onclick = clearSession;
-  // scroll-reveal on landing (Physgun vibe) — only when IntersectionObserver exists
-  if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-    const io = new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    }), { threshold: 0.1 });
-    document.querySelectorAll('#landing .cards3 .card, #landing .trust, #landing .faq-list details').forEach((el) => {
-      el.classList.add('reveal'); io.observe(el);
-    });
-  }
   renderChangelog();
 }
 
