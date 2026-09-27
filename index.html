@@ -48,7 +48,7 @@
       <p class="lede">Feed in RVTools data or manual host counts, define the per-host port profile, pick your TOR and FC switch platforms — and get port counts, oversubscription ratios, dual-fabric SAN math, a switch BOM, and a customer-ready report. 100% in your browser, nothing uploaded.</p>
       <div class="trust-row">
         <div class="trust"><span class="trust-icon">🛡️</span><div><strong>No upload.</strong><span>Data never leaves your PC</span></div></div>
-        <div class="trust"><span class="trust-icon">🧠</span><div><strong>No storage.</strong><span>Nothing saved, ever</span></div></div>
+        <div class="trust"><span class="trust-icon">💾</span><div><strong>Local saves.</strong><span>Projects stay in your browser, never uploaded</span></div></div>
         <div class="trust"><span class="trust-icon">📴</span><div><strong>Works offline.</strong><span>Disconnect after load if you like</span></div></div>
         <div class="trust"><span class="trust-icon">👤</span><div><strong>No account.</strong><span>Just open and size</span></div></div>
       </div>
@@ -115,7 +115,7 @@
       <h2>Frequently asked questions</h2>
       <div class="faq-list">
         <details><summary>Is my data uploaded anywhere?</summary><p>No. Files are read with the browser's FileReader API and parsed in memory by a vendored copy of SheetJS running in this page; manual entries never leave the form. There is no server and no network request carrying your data — check devtools' network tab, or disconnect after the page loads.</p></details>
-        <details><summary>Is anything stored in my browser?</summary><p>No. Everything lives in the page's JavaScript memory for the session. Nothing goes to localStorage, IndexedDB, or cookies. Hit "Clear session data" or close the tab and it's gone.</p></details>
+        <details><summary>Is anything stored in my browser?</summary><p>Only what you choose to save. Named Projects and autosave live in your browser's localStorage — on your machine only, never uploaded. Hit "Clear session data" to wipe them, or close the tab and the in-memory session is gone.</p></details>
         <details><summary>Do I need an RVTools export, or can I type numbers in?</summary><p>Either. The export gives you host counts per cluster automatically from the <code>vHost</code> tab. Manual entry just needs host counts per group — the math never looks at VMs, they're context only.</p></details>
         <details><summary>What is oversubscription, and what should I target?</summary><p>The ratio of total downlink bandwidth (everything plugged into the TOR) to total uplink bandwidth (TOR to spine). 3:1 is the classic datacenter rule of thumb the tool defaults to; 1:1 is non-blocking. Storage-heavy or vMotion-heavy estates deserve a lower target — east-west traffic is what oversubscription punishes.</p></details>
         <details><summary>Why does the tool push dual-homing and dual FC fabrics?</summary><p>Because a single TOR switch or a single FC fabric is a maintenance and failure blast radius that takes down every host in the rack. A/B dual-homing (vPC/MLAG) and Fabric A/B are standard presales posture — the tool sizes for them by default and flags it loudly when you turn them off.</p></details>
@@ -329,6 +329,6 @@
 
 <script src="lib/xlsx.full.min.js"></script>
 <script src="js/app-switcher.js?v=1"></script>
-<script src="js/app.js?v=7"></script>
+<script src="js/app.js?v=8"></script>
 </body>
 </html>

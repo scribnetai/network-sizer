@@ -148,14 +148,13 @@ function sizeEthernet(hosts, prof, eth) {
       unserved += cnt;
     }
   });
-  // For shared 100G ports: full-speed ports consume whole ports, sub-ports consume 1/4
+  // For shared 100G ports: full-speed ports and breakout sub-ports share the same
+  // physical ports — full-speed ports consume whole ports, sub-ports consume 1/4.
   let switchesRaw;
   if (P.sharedPorts && P.dlSpeed === 100) {
-    const portCap = usableDl, subCap = usableDl * 4;
-    switchesRaw = Math.max(
-      fullPorts ? Math.ceil(fullPorts / Math.max(1, portCap)) : 0,
-      subPorts ? Math.ceil(subPorts / Math.max(1, subCap)) : 0
-    );
+    const portCap = Math.max(1, usableDl);
+    const portEquivDemand = fullPorts + Math.ceil(subPorts / 4);
+    switchesRaw = portEquivDemand ? Math.ceil(portEquivDemand / portCap) : 0;
     servedPorts = fullPorts + subPorts;
   } else {
     switchesRaw = servedPorts ? Math.ceil(servedPorts / Math.max(1, usableDl)) : 0;
@@ -659,7 +658,7 @@ function renderPlanTab() {
     const cls = pct > 95 ? 'red' : pct > 80 ? 'amber' : 'green';
     return '<div class="bar-row"><div class="bar-label">' + label + '</div>' +
       '<div class="bar-track"><div class="bar-fill ' + cls + '" style="width:' + Math.min(100, pct) + '%"></div></div>' +
-      '<div class="bar-val">' + pct + '%</div></div>';
+      '<div class="bar-val">' + Math.min(100, pct) + '%</div></div>';
   };
 
   const stats =
@@ -702,7 +701,10 @@ function ethWorked() {
     '<strong style="color:#ff9d9d">' + fmtInt(ethR.unserved) + ' UNSERVED</strong>');
   s += mathStep(++n, 'usable downlinks / switch = ' + ethR.P.dl + (ethR.P.sharedPorts ? ' − ' + ethR.uplinks + ' uplinks (shared pool)' : ' (dedicated uplinks)'),
     fmtInt(ethR.usableDl) + (ethR.P.sharedPorts && ethR.P.dlSpeed === 100 ? ' ports / ' + fmtInt(ethR.usableDl * 4) + ' sub-ports' : ''));
-  s += mathStep(++n, 'raw switches = ceil(' + fmtInt(ethR.servedPorts) + ' ÷ ' + ethR.usableDl + ')' +
+  const swFormula = (ethR.P.sharedPorts && ethR.P.dlSpeed === 100)
+    ? 'raw switches = ceil((' + fmtInt(ethR.fullPorts) + ' full-speed + ' + fmtInt(ethR.subPorts) + ' sub-ports ÷ 4) ÷ ' + ethR.usableDl + ') — breakout shares physical ports 4:1'
+    : 'raw switches = ceil(' + fmtInt(ethR.servedPorts) + ' ÷ ' + ethR.usableDl + ')';
+  s += mathStep(++n, swFormula +
     (E.dual ? ' → round to pair (A/B)' : '') + (E.spare ? ' → +1 spare' : ''),
     '<strong>' + ethR.switches + ' switches</strong>');
   s += mathStep(++n, 'downlink bandwidth = Σ ports × speed', fmtInt(ethR.servedBW) + ' Gbps');
@@ -888,7 +890,9 @@ function buildReportHTML() {
   const ethSteps = [
     ['Host port profile', P.hosts + ' hosts × (' + P.mgmtN + '×' + P.mgmtS + 'G mgmt + ' + P.dataN + '×' + P.dataS + 'G data + ' + P.storN + '×' + P.storS + 'G storage IP)', fmtInt(ethR.servedPorts) + ' downlink ports'],
     ['Usable downlinks / switch', ethR.P.dl + (ethR.P.sharedPorts ? ' − ' + ethR.uplinks + ' uplinks (shared pool)' : ' (dedicated uplinks)'), fmtInt(ethR.usableDl)],
-    ['Switches', 'ceil(' + fmtInt(ethR.servedPorts) + ' ÷ ' + ethR.usableDl + ')' + (E.dual ? ' → A/B pair' : '') + (E.spare ? ' → +1 spare' : ''), '<strong>' + ethR.switches + ' switches</strong>'],
+    ['Switches', ((ethR.P.sharedPorts && ethR.P.dlSpeed === 100)
+      ? 'ceil((' + fmtInt(ethR.fullPorts) + ' full-speed + ' + fmtInt(ethR.subPorts) + ' sub-ports ÷ 4) ÷ ' + ethR.usableDl + ') — breakout shares physical ports 4:1'
+      : 'ceil(' + fmtInt(ethR.servedPorts) + ' ÷ ' + ethR.usableDl + ')') + (E.dual ? ' → A/B pair' : '') + (E.spare ? ' → +1 spare' : ''), '<strong>' + ethR.switches + ' switches</strong>'],
     ['Oversubscription', fmtInt(ethR.servedBW) + ' Gbps downlink ÷ ' + fmtInt(ethR.uplinkBW) + ' Gbps uplink (target ≤ ' + E.overTarget + ':1)', '<strong>' + overStr(ethR.over) + '</strong>'],
   ];
   const fcSteps = fcR.enabled ? [
