@@ -20,11 +20,11 @@ h2{font-size:1.6rem} h3{font-size:1.15rem}
 
 /* nav */
 .nav{position:sticky;top:0;z-index:50;background:rgba(10,13,19,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1120px;margin:0 auto;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+.nav-inner{max-width:1120px;margin:0 auto;padding:14px 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
 .brand-badge{background:var(--accent);color:#fff;font-weight:800;border-radius:8px;padding:4px 9px;font-size:.9rem}
 .brand-name{font-weight:700}
-.brand-dropdown{position:relative}
+.brand-dropdown{position:relative;justify-self:start}
 button.brand{background:none;border:0;cursor:pointer;font:inherit;padding:6px 10px;margin:-6px -10px;border-radius:10px}
 button.brand:hover{background:rgba(255,255,255,.05)}
 .brand-caret{font-size:.65rem;color:var(--muted);margin-left:1px}
@@ -35,11 +35,12 @@ button.brand:hover{background:rgba(255,255,255,.05)}
 .brand-item .bi{font-size:1.05rem;line-height:1}
 .brand-item.is-current{color:var(--accent2);font-weight:700}
 .brand-item .cur{margin-left:auto;font-size:.7rem;color:var(--muted);font-weight:400}
-.nav-links{display:flex;gap:22px}
+.nav-links{display:flex;gap:22px;justify-self:end}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:.92rem}
 .nav-links a:hover{color:var(--text)}
-.nav-links a.cc-link{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--border2);background:var(--panel);border-radius:999px;padding:6px 14px;font-size:.85rem;color:var(--text);white-space:nowrap}
-.nav-links a.cc-link:hover{border-color:var(--accent);color:var(--accent2)}
+.cc-link{justify-self:center;display:inline-flex;align-items:center;gap:8px;padding:7px 18px;border-radius:999px;background:rgba(80,140,255,.1);border:1px solid transparent;color:var(--text);text-decoration:none;font-size:.88rem;font-weight:600;white-space:nowrap;transition:background .15s ease}
+.cc-link:hover{background:rgba(80,140,255,.2);color:#fff}
+.cc-link .cc-ico{color:var(--accent2);font-size:1rem;line-height:1}
 
 /* hero */
 .hero{position:relative;overflow:hidden;padding:96px 0 72px;text-align:center}
@@ -202,7 +203,7 @@ footer{border-top:1px solid var(--border);padding:26px 0}
 .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 @media(max-width:640px){
-  .nav-links a:not(.cc-link){display:none}
+  .nav-links{display:none}
   .hero{padding:64px 0 48px}
   .bar-row{grid-template-columns:120px 1fr 70px}
   .dash-head{flex-direction:column}
