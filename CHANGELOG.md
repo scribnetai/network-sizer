@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-09-28
+- Migrated legacy `scribnetai.github.io` links to `https://<app>.scribnet.io` for the HTTPS-enforced apps (se-command-center, server-sizer, network-sizer); links to the remaining apps left on the legacy URLs until their TLS certs are issued. Touched: index.html, js/app-switcher.js.
+
 ## 2026-09-26
 - Restyled with a Physgun-inspired vibe: Outfit display font, glowing blue sliders with live value badges and min/mid/max scales, blue-glyph section tiles, gradient key numbers, animated bandwidth bars plus a stacked oversubscription meter on the Plan tab, and scroll-reveal on the landing. Segmented pill buttons now drive the dual-homing, N+1 spare, breakout, and FC-fabric toggles; Target hosts is now a slider (max auto-scales with detected hosts). All sizing math, projects, and saved data untouched.
 

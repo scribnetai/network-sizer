@@ -2,10 +2,10 @@
    The menu renders from the APPS array below: one place to edit when apps are added.
    (Statement Analyzer is intentionally listed only on its own page.) */
 const APPS = [
-  { name: "SE Command Center", glyph: "🎛️", url: "https://scribnetai.github.io/se-command-center/" },
-  { name: "Server Sizer", glyph: "🖥️", url: "https://scribnetai.github.io/server-sizer/" },
+  { name: "SE Command Center", glyph: "🎛️", url: "https://se-command-center.scribnet.io/" },
+  { name: "Server Sizer", glyph: "🖥️", url: "https://server-sizer.scribnet.io/" },
   { name: "Storage Sizer", glyph: "💾", url: "https://scribnetai.github.io/storage-sizer/" },
-  { name: "Network Sizer", glyph: "🌐", url: "https://scribnetai.github.io/network-sizer/" },
+  { name: "Network Sizer", glyph: "🌐", url: "https://network-sizer.scribnet.io/" },
   { name: "RVTools Analyzer", glyph: "🔍", url: "https://scribnetai.github.io/rvtools-analyzer/" },
   { name: "Deal Pack", glyph: "🤝", url: "https://scribnetai.github.io/deal-pack/" },
   { name: "Battlecards", glyph: "⚔️", url: "https://scribnetai.github.io/battlecards/" },
