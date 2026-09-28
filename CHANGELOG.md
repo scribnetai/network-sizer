@@ -1,6 +1,9 @@
 # Changelog
 
 ## 2026-09-28
+- Added Umami website analytics (cookieless, no consent banner): pageview tracking plus custom events for ad-slot impression/click reporting.
+
+## 2026-09-28
 - Added a floating Feedback button (bottom-right) that opens a dialog to send feedback via email — topic chips, optional name, and message, addressed to the site owner with the app name in the subject.
 
 ## 2026-09-28
