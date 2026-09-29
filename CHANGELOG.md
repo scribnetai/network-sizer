@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-09-29 — Full SEO head tags
+
+- Added canonical URL, meta description, Open Graph + Twitter Card tags, and JSON-LD structured data (`WebApplication`) to the page head.
 ## 2026-09-29 — Prompts page added to the app-switcher header
 
 - The scribnet.io `/prompts.html` workflow-prompts page is now one click away from the app-switcher dropdown in the header, alongside the other destinations.
