@@ -11,7 +11,8 @@ const APPS = [
   { name: "Battlecards", glyph: "⚔️", url: "https://battlecards.scribnet.io/" },
   { name: "TCO Calculator", glyph: "🧮", url: "https://tco-calculator.scribnet.io/" },
   { name: "Cargo Foundry", glyph: "🏭", url: "https://cargo-foundry.scribnet.io/" },
-  { name: "scribnet.io", glyph: "🏠", url: "https://scribnet.io/" },
+    { name: "Prompts", glyph: "📋", url: "https://scribnet.io/prompts.html" },
+{ name: "scribnet.io", glyph: "🏠", url: "https://scribnet.io/" },
 ];
 
 /* What the "this page" item does: exit any app view back to the landing. */

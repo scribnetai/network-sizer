@@ -1,5 +1,8 @@
 # Changelog
 
+## 2026-09-29 — Prompts page added to the app-switcher header
+
+- The scribnet.io `/prompts.html` workflow-prompts page is now one click away from the app-switcher dropdown in the header, alongside the other destinations.
 ## 2026-09-28 — Canonical subdomain links
 - Replaced legacy `scribnetai.github.io/<repo>/` links with canonical
   `https://<repo>.scribnet.io/` URLs (the old URLs 301-redirect, but docs and
