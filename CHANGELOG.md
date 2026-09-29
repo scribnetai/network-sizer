@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-28 — Canonical subdomain links
+- Replaced legacy `scribnetai.github.io/<repo>/` links with canonical
+  `https://<repo>.scribnet.io/` URLs (the old URLs 301-redirect, but docs and
+  on-page links should point at the real address).
+
 ## 2026-09-28
 - Added Umami website analytics (cookieless, no consent banner): pageview tracking plus custom events for ad-slot impression/click reporting.
 
