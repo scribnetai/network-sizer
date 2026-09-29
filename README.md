@@ -1,11 +1,11 @@
 # Network Sizer
 
 TOR & FC SAN switch planner for VMware refreshes. Fourth app in the presales SE sizer suite
-([server-sizer](https://scribnetai.github.io/server-sizer/),
-[storage-sizer](https://scribnetai.github.io/storage-sizer/),
-[rvtools-analyzer](https://scribnetai.github.io/rvtools-analyzer/)).
+([server-sizer](https://server-sizer.scribnet.io/),
+[storage-sizer](https://storage-sizer.scribnet.io/),
+[rvtools-analyzer](https://rvtools-analyzer.scribnet.io/)).
 
-**Live:** https://scribnetai.github.io/network-sizer/
+**Live:** https://network-sizer.scribnet.io/
 
 ## What it does
 
